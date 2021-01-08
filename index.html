@@ -3,14 +3,24 @@
 <head>
     <meta charset="utf-8">
     <title>project</title>
-    <script src="./dist/main.js" defer></script>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
+            margin: 0;
             background-color: #343454;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
         }
     </style>
 </head>
 
-<body></body>
+<body>
+    <canvas id="render" width=800 height=600></canvas>
+</body>
 
 </html>

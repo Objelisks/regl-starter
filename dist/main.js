@@ -19,6 +19,17 @@ eval("(function (global, factory) {\n     true ? module.exports = factory() :\n 
 
 /***/ }),
 
+/***/ "./src/libs/regl.js":
+/*!**************************!*\
+  !*** ./src/libs/regl.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => __WEBPACK_DEFAULT_EXPORT__\n/* harmony export */ });\n/* harmony import */ var regl__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regl */ \"./node_modules/regl/dist/regl.js\");\n/* harmony import */ var regl__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regl__WEBPACK_IMPORTED_MODULE_0__);\n\r\n\r\nconst regl = regl__WEBPACK_IMPORTED_MODULE_0___default()({\r\n  container: document.body.querySelector('#render'),\r\n  extensions: [\r\n  ]\r\n})\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (regl);\r\n\n\n//# sourceURL=webpack://floaty/./src/libs/regl.js?");
+
+/***/ }),
+
 /***/ "./src/main.js":
 /*!*********************!*\
   !*** ./src/main.js ***!
@@ -26,7 +37,7 @@ eval("(function (global, factory) {\n     true ? module.exports = factory() :\n 
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var regl__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regl */ \"./node_modules/regl/dist/regl.js\");\n/* harmony import */ var regl__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regl__WEBPACK_IMPORTED_MODULE_0__);\n\r\n\r\nconst regl = regl__WEBPACK_IMPORTED_MODULE_0___default()()\r\n\r\nconsole.log('hello world', regl)\r\n\n\n//# sourceURL=webpack://floaty/./src/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _libs_regl__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/regl */ \"./src/libs/regl.js\");\n\r\n\r\nconsole.log('hello world', _libs_regl__WEBPACK_IMPORTED_MODULE_0__.default)\r\n\n\n//# sourceURL=webpack://floaty/./src/main.js?");
 
 /***/ })
 
