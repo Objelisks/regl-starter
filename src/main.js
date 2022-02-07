@@ -4,16 +4,6 @@ import { regl } from './libs/regl'
 import { FRAME_WIDTH, FRAME_HEIGHT, CLEAR_COLOR } from './constants.js'
 import { activeFrame, resizeFrames } from './engine/render.js'
 
-console.log('hello world')
-
-regl.frame(() => {
-  regl.clear({
-    color: [0, 0, 0, 1]
-  })
-})
-
-/// example shader
-// example file load
 window.addEventListener('resize', () => resizeFrames(FRAME_WIDTH, FRAME_HEIGHT))
 
 const render = () => {
@@ -45,5 +35,7 @@ const render = () => {
     }
   })
 }
+
+console.log('hello world')
 
 requestAnimationFrame(render)

@@ -9,7 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [new HtmlWebpackPlugin({
-    template: './index.html'
+    template: './src/web/index.html'
   })],
   module: {
     rules: [
@@ -19,12 +19,7 @@ module.exports = {
         use: [
           'raw-loader',
           {
-            loader: 'glslify-loader',
-            options: {
-              transform: [
-                ['glslify-hex', { 'option-1': true, 'option-2': 42 }]
-              ]
-            }
+            loader: 'glslify-loader'
           }
         ]
       }
