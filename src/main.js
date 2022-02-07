@@ -1,41 +1,20 @@
 /* global requestAnimationFrame */
-import { regl } from './libs/regl'
 
-import { FRAME_WIDTH, FRAME_HEIGHT, CLEAR_COLOR } from './constants.js'
-import { activeFrame, resizeFrames } from './engine/render.js'
-
-window.addEventListener('resize', () => resizeFrames(FRAME_WIDTH, FRAME_HEIGHT))
-
-const render = () => {
-  regl.poll()
-
-  const draw = () => {
-    // camera
-    regl.clear({
-      color: CLEAR_COLOR,
-      depth: 1
-    })
-
-    // render world
-
-    // render objects
-
-    // render ui
-  }
-
-  const passes = [
-    () => draw()
-  ]
-
-  passes.forEach((pass, i) => {
-    if (i === passes.length - 1) {
-      pass()
-    } else {
-      activeFrame().fbo.use(pass)
-    }
-  })
-}
+import { renderFrame } from './render/render.js'
+import { drawPlane } from './render/primitives/plane.js'
+import { camera } from './render/camera.js'
 
 console.log('hello world')
 
-requestAnimationFrame(render)
+const draw = () => {
+  camera(
+    {
+      eye: [2, 2, 2],
+      target: [0, 0, 0]
+    },
+    (context) => {
+      drawPlane()
+    })
+}
+
+requestAnimationFrame(() => renderFrame(draw))

@@ -18,9 +18,7 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           'raw-loader',
-          {
-            loader: 'glslify-loader'
-          }
+          'glslify-loader'
         ]
       }
     ]
