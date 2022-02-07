@@ -1,9 +1,8 @@
 import createREGL from 'regl'
 
-const regl = createREGL({
+export const regl = createREGL({
   canvas: document.body.querySelector('#render'),
   extensions: [
+    'WEBGL_depth_texture'
   ]
 })
-
-export default regl

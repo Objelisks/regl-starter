@@ -1,7 +1,7 @@
 /* global requestAnimationFrame */
-import regl from './libs/regl'
+import { regl } from './libs/regl'
 
-import { CLEAR_COLOR } from './constants.js'
+import { FRAME_WIDTH, FRAME_HEIGHT, CLEAR_COLOR } from './constants.js'
 import { activeFrame, resizeFrames } from './engine/render.js'
 
 console.log('hello world')
@@ -14,7 +14,7 @@ regl.frame(() => {
 
 /// example shader
 // example file load
-window.addEventListener('resize', resizeFrames)
+window.addEventListener('resize', () => resizeFrames(FRAME_WIDTH, FRAME_HEIGHT))
 
 const render = () => {
   regl.poll()

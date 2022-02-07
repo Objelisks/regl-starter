@@ -1,5 +1,5 @@
 import { regl } from '../libs/regl.js'
-import { FRAME_WIDTH, FRAME_HEIGHT } from './constants.js'
+import { FRAME_WIDTH, FRAME_HEIGHT } from '../constants.js'
 import { times } from './util.js'
 
 const makeFramebuffer = (width, height) => {
@@ -21,7 +21,7 @@ const frameCount = 2
 let frames = [0, 1]
 const resizeFrames = (width, height) => {
   frames = []
-  times(frameCount, frames.push(makeFramebuffer(width, height)))
+  times(frameCount, () => frames.push(makeFramebuffer(width, height)))
 }
 resizeFrames(FRAME_WIDTH, FRAME_HEIGHT)
 const frameIndex = 0
