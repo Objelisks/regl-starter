@@ -37,8 +37,9 @@ src/
     index.html
     styles.css
   render/ - primitives, shaders
-    shaders/
-    primitives/
+    shaders/ - vertex and fragment source
+    primitives/ - simple 3d objects for debug or composition
+    ui/ - 2d screenspace stuff
     model.js
     animation.js
     reglhelpers.js

@@ -1,6 +1,10 @@
+/* global requestAnimationFrame */
 import regl from './libs/regl'
 
-console.log('hello world', regl)
+import { CLEAR_COLOR } from './constants.js'
+import { activeFrame, resizeFrames } from './engine/render.js'
+
+console.log('hello world')
 
 regl.frame(() => {
   regl.clear({
@@ -10,3 +14,36 @@ regl.frame(() => {
 
 /// example shader
 // example file load
+window.addEventListener('resize', resizeFrames)
+
+const render = () => {
+  regl.poll()
+
+  const draw = () => {
+    // camera
+    regl.clear({
+      color: CLEAR_COLOR,
+      depth: 1
+    })
+
+    // render world
+
+    // render objects
+
+    // render ui
+  }
+
+  const passes = [
+    () => draw()
+  ]
+
+  passes.forEach((pass, i) => {
+    if (i === passes.length - 1) {
+      pass()
+    } else {
+      activeFrame().fbo.use(pass)
+    }
+  })
+}
+
+requestAnimationFrame(render)
