@@ -19,10 +19,7 @@ export const camera = regl({
     },
 
     eye: regl.prop('eye'),
-    target: regl.prop('target'),
-    lightPos: (context) => {
-      return [0, 5, 0]
-    }
+    target: regl.prop('target')
   },
 
   uniforms: {

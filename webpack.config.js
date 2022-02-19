@@ -8,8 +8,13 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist')
   },
+  devServer: {
+    static: {
+      directory: path.resolve(__dirname, 'public')
+    }
+  },
   plugins: [new HtmlWebpackPlugin({
-    template: './src/web/index.html'
+    template: './public/index.html'
   })],
   module: {
     rules: [

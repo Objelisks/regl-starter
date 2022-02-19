@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@loaders.gl/core": "^3.1.8",
+    "@loaders.gl/gltf": "^3.1.8",
     "gl-matrix": "^3.4.3",
     "regl": "^2.1.0"
   },
@@ -21,9 +23,9 @@
     "html-webpack-plugin": "^4.5.2",
     "raw-loader": "^4.0.2",
     "standard": "^16.0.4",
-    "webpack": "^5.68.0",
+    "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^3.11.3"
+    "webpack-dev-server": "^4.7.4"
   },
   "standard.options": {
     "ignore": [

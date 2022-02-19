@@ -2,7 +2,7 @@ import { regl } from './regl.js'
 import { FRAME_WIDTH, FRAME_HEIGHT, CLEAR_COLOR } from '../constants.js'
 import { times } from '../engine/util.js'
 
-const FRAME_COUNT = 2
+const BUFFER_COUNT = 2
 
 const makeFramebuffer = (width, height) => {
   const color = regl.texture({ width, height })
@@ -25,7 +25,7 @@ const frameIndex = 0
 
 const resizeFrames = (width, height) => {
   frames = []
-  times(FRAME_COUNT, () => frames.push(makeFramebuffer(width, height)))
+  times(BUFFER_COUNT, () => frames.push(makeFramebuffer(width, height)))
 }
 resizeFrames(FRAME_WIDTH, FRAME_HEIGHT)
 window.addEventListener('resize', () => resizeFrames(FRAME_WIDTH, FRAME_HEIGHT))
