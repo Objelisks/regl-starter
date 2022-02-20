@@ -1,4 +1,4 @@
-Standard 3d game engine starter project
+# Standard 3d game engine starter project
 
 Uses regl, webpack, standard
 
@@ -26,7 +26,7 @@ test scene
 - stats debug info
 
 
-file structure
+## file structure
 root/
 content/ - models, textures, sounds in folders that make sense
 src/
@@ -60,3 +60,8 @@ src/
 
 
 tests/
+
+
+## reference
+
+https://glmatrix.net/docs/index.html
