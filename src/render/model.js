@@ -1,4 +1,6 @@
 /* globals fetch */
+import { regl } from './regl.js'
+import { mat4, quat } from 'gl-matrix'
 import { parse } from '@loaders.gl/core'
 import { GLTFLoader } from '@loaders.gl/gltf'
 
@@ -10,3 +12,16 @@ export const loadModel = (name) => {
 export const model = () => {
 
 }
+
+export const transform = regl({
+  context: {
+    model: (context, props) => mat4.fromRotationTranslationScale([],
+      props.rotation || quat.create(),
+      props.position || [0, 0, 0],
+      props.scale || [1, 1, 1])
+  },
+  uniforms: {
+    model: (context) => context.model,
+    invModel: (context) => mat4.invert([], context.model)
+  }
+})
