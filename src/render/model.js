@@ -2,17 +2,13 @@
 import { regl } from './regl.js'
 import { mat4, quat } from 'gl-matrix'
 import { parse } from '@loaders.gl/core'
-import { GLTFLoader, GLTFScenegraph } from '@loaders.gl/gltf'
+import { GLTFLoader } from '@loaders.gl/gltf'
 
 export const loadModel = (name) => {
-  console.log('loading')
+  console.log(`loading ${name}`)
   return fetch(name)
     .then(data => parse(data, GLTFLoader))
     .then(gltfData => gltfData.scene)
-}
-
-export const model = () => {
-
 }
 
 export const transform = regl({

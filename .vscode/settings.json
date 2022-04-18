@@ -1,0 +1,5 @@
+{
+  "standard.autoFixOnSave": true,
+  "prettier.enable": false,
+  "editor.defaultFormatter": "standard.vscode-standard"
+}

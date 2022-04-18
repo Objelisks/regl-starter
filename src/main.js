@@ -9,9 +9,11 @@ import { loadModel, transform } from './render/model.js'
 import { drawCube } from './render/primitives/cube.js'
 import { drawSphere } from './render/primitives/sphere.js'
 import { flatShader } from './render/shaders.js'
+import { createModelDrawer } from './render/primitives/model.js'
 
 // initLoaders()
-loadModel('content/mouse1.gltf').then(model => console.log(model))
+// loadModel('content/mouse1.gltf').then(model => console.log(model))
+const drawMouse = createModelDrawer('content/mouse1.gltf')
 
 let tick = 0
 
@@ -36,7 +38,7 @@ const draw = () => {
           rotation: quat.setAxisAngle([], [0, 1, 0], tick),
           scale: [0.5, 0.5, 0.5]
         }, (context) => {
-          drawSphere()
+          drawMouse()
         })
       })
     })
