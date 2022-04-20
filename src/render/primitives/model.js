@@ -1,17 +1,16 @@
-import { regl } from '../regl.js'
-import { createDrawScene } from './gltf.js'
+import { setupSceneForDrawing, drawScene } from './gltf.js'
 import { loadModel } from '../model.js'
 
 // mesh, textures, animation
 
 const cacher = {}
-const drawNothing = regl.draw
 
 export const createModelDrawer = (name) => {
   if (!cacher[name]) {
-    cacher[name] = drawNothing
+    cacher[name] = () => {}
     loadModel(name).then(scene => {
-      cacher[name] = createDrawScene(scene)
+      setupSceneForDrawing(scene)
+      cacher[name] = () => drawScene(scene)
     })
   }
   return (...args) => cacher[name](...args)
