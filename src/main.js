@@ -4,7 +4,7 @@ import { quat } from 'gl-matrix'
 import { renderFrame } from './render/render.js'
 import { drawPlane } from './render/primitives/plane.js'
 import { camera } from './render/camera.js'
-import { transform } from './render/model.js'
+import { transform } from './render/transform.js'
 import { drawCube } from './render/primitives/cube.js'
 import { flatShader } from './render/shaders.js'
 import { createModelDrawer } from './render/primitives/model.js'
@@ -21,8 +21,8 @@ const draw = () => {
       target: [0, 0, 0]
     },
     (context) => {
-      drawPlane()
       flatShader({ color: [1, 0.5, 0.5] }, () => {
+        drawPlane()
         transform({
           position: [Math.cos(tick), 0, Math.sin(tick)],
           rotation: quat.setAxisAngle([], [1, 0, 0], tick)

@@ -1,14 +1,6 @@
 /* globals fetch */
 import { regl } from './regl.js'
-import { mat4, quat } from 'gl-matrix'
-import { parse } from '@loaders.gl/core'
-import { GLTFLoader } from '@loaders.gl/gltf'
-
-export const loadModel = (name) => {
-  return fetch(name)
-    .then(data => parse(data, GLTFLoader))
-    .then(gltfData => gltfData.scene)
-}
+import { mat4 } from 'gl-matrix'
 
 export const transform = regl({
   context: {

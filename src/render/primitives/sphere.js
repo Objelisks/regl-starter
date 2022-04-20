@@ -4,7 +4,7 @@ import { loadModel } from '../model.js'
 let loaded = false
 let sphereDrawer = null
 
-loadModel('/content/primitives/sphere.glb').then(scene => {
+loadModel('content/primitives/sphere.glb').then(scene => {
   loaded = true
   const data = scene.nodes[0].mesh.primitives[0]
   sphereDrawer = regl({

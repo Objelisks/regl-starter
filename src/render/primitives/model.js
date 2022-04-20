@@ -1,17 +1,24 @@
 import { setupSceneForDrawing, drawScene } from './gltf.js'
-import { loadModel } from '../model.js'
+import { parse } from '@loaders.gl/core'
+import { GLTFLoader } from '@loaders.gl/gltf'
 
 // mesh, textures, animation
 
-const cacher = {}
+export const loadModel = (name) => {
+  return fetch(name)
+    .then(data => parse(data, GLTFLoader))
+    .then(gltfData => gltfData.scene)
+}
+
+const modelCacher = {}
 
 export const createModelDrawer = (name) => {
-  if (!cacher[name]) {
-    cacher[name] = () => {}
+  if (!modelCacher[name]) {
+    modelCacher[name] = () => {}
     loadModel(name).then(scene => {
       setupSceneForDrawing(scene)
-      cacher[name] = () => drawScene(scene)
+      modelCacher[name] = () => drawScene(scene)
     })
   }
-  return (...args) => cacher[name](...args)
+  return (...args) => modelCacher[name](...args)
 }

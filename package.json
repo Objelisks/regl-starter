@@ -1,5 +1,5 @@
 {
-  "name": "micemecha",
+  "name": "regl-starter",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -30,7 +30,8 @@
   },
   "standard.options": {
     "ignore": [
-      "node_modules/**"
+      "node_modules/**",
+      "public/**"
     ],
     "plugins": [
       "html"

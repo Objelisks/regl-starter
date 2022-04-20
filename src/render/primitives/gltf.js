@@ -2,7 +2,7 @@
 // https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/figures/gltfOverview-2.0.0b.png
 
 import { regl } from '../regl'
-import { transform } from '../model.js'
+import { transform } from '../transform.js'
 import { mat4 } from 'gl-matrix'
 
 const renderingModes = {
