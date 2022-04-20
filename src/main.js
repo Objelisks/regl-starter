@@ -15,8 +15,7 @@ let tick = 0
 
 const draw = () => {
   tick += 0.016
-  camera(
-    {
+  camera({
       eye: [2, 2, 2],
       target: [0, 0, 0]
     },
