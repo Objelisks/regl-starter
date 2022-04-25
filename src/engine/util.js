@@ -4,3 +4,5 @@ export const times = (x, func) => {
     func(i)
   }
 }
+
+export const id = () => crypto.randomUUID()
