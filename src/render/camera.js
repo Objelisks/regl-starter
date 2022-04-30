@@ -1,7 +1,11 @@
 import { mat4 } from 'gl-matrix'
 import { regl } from './regl.js'
 
-// This scoped command sets up the camera parameters
+/**
+ * camera({eye: vec3, target: vec3}, () => draw things)
+ * 
+ * TODO: support fov, tilt?
+ */
 export const camera = regl({
   context: {
     projection: (context) => {
