@@ -24,16 +24,19 @@ const evaluate = (thing, t) => ({
 
 const things = [
   {
+    id: id(),
     position: [0,0,0],
     rotation: [0,0,0,1],
     draw: drawPlane
   },
   {
+    id: id(),
     position: t => [Math.cos(t), 0, Math.sin(t)],
     rotation: t => quat.setAxisAngle([], [1, 0, 0], t),
     draw: drawCube
   },
   {
+    id: id(),
     position: t => [Math.cos(-t), -1, Math.sin(-t)],
     rotation: t => quat.setAxisAngle([], [0, 1, 0], t*3.0),
     scale: [0.1, 0.1, 0.1],
@@ -41,12 +44,8 @@ const things = [
   }
 ]
 
-console.log(id())
-
 const draw = () => {
   tick += 0.016
-
-
 
   camera({
       eye: [2, 2, 2],
@@ -54,7 +53,10 @@ const draw = () => {
     },
     (context) => {
       flatShader({ color: [1, 0.5, 0.5] }, () => {
-        things.forEach((thing) => transform(evaluate(thing, tick), thing.draw))
+        things.forEach((thing) => transform(evaluate(thing, tick), (context) => {
+          
+          thing.draw()
+        }))
       })
     })
   requestAnimationFrame(() => renderFrame(draw))

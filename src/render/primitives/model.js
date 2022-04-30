@@ -4,6 +4,11 @@ import { GLTFLoader } from '@loaders.gl/gltf'
 
 // mesh, textures, animation
 
+/**
+ * loads a model over network
+ * @param {string} name relative url of model
+ * @returns gltf scene object
+ */
 export const loadModel = (name) => {
   return fetch(name)
     .then(data => parse(data, GLTFLoader))
@@ -12,6 +17,11 @@ export const loadModel = (name) => {
 
 const modelCacher = {}
 
+/**
+ * creates a function that will eventually draw a model
+ * @param {string} name relative url of model
+ * @returns (props) => void
+ */
 export const createModelDrawer = (name) => {
   if (!modelCacher[name]) {
     modelCacher[name] = () => {}

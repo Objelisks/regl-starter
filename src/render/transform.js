@@ -2,6 +2,13 @@
 import { regl } from './regl.js'
 import { mat4 } from 'gl-matrix'
 
+/**
+ * transform({position: vec3, rotation: quat, scale: vec3, matrix: mat4}, () => draw something)
+ * 
+ * matrix is used first if it exists over pos/rot/scale
+ * these calls can be nested
+ * generates model and invModel uniforms
+ */
 export const transform = regl({
   context: {
     model: (context, props) => {
@@ -18,6 +25,7 @@ export const transform = regl({
       return matrix
     }
   },
+  // TODO: move this into a later call so that we don't invert matrices every transform call, but just at the end
   uniforms: {
     model: (context) => context.model,
     invModel: (context) => mat4.invert([], context.model)

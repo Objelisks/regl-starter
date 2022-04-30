@@ -45,6 +45,11 @@ const setupNode = (node) => {
   return draws
 }
 
+/**
+ * adds a draw function to each renderable node in the scene graph
+ * @param {SceneGraph} scene 
+ * @returns scene
+ */
 export const setupSceneForDrawing = (scene) => {
   scene.nodes.forEach((node, i) => setupNode(node))
   return scene
@@ -73,6 +78,10 @@ const drawNode = (node) => {
   )
 }
 
+/**
+ * draws all the renderable nodes in a scene
+ * @param {SceneGraph} scene 
+ */
 export const drawScene = (scene) => {
   scene.nodes.forEach((node) => drawNode(node))
 }

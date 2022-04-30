@@ -32,6 +32,10 @@ window.addEventListener('resize', () => resizeFrames(FRAME_WIDTH, FRAME_HEIGHT))
 
 const activeFrame = () => frames[frameIndex]
 
+/**
+ * clears, draws scene, and then performs postprocessing
+ * @param {()=>void} drawWorld 
+ */
 const renderFrame = (drawWorld) => {
   regl.poll()
 

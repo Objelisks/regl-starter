@@ -12,6 +12,7 @@ placeholder stuff
 - render pipeline
 - unlit shader
 - brdf shader
+- animation shader
 - some debug primitives
 - helper functions for regl
 
@@ -26,42 +27,26 @@ test scene
 - stats debug info
 
 
-## file structure
-root/
-content/ - models, textures, sounds in folders that make sense
-src/
-  libs/ - third party libraries
-    regl.js
-    glmatrix.js
-  web/
-    index.html
-    styles.css
-  render/ - primitives, shaders
-    shaders/ - vertex and fragment source
-    primitives/ - simple 3d objects for debug or composition
-    ui/ - 2d screenspace stuff
-    model.js
-    animation.js
-    reglhelpers.js
-  engine/ - shared generic stuff
-    input/ - 
-      keyboard.js
-      mouse.js
-      gamepad.js
-    audio.js
-    camera.js
-    raycast.js
-    network.js
-    math.js
-  game/ - game specific stuff
-
-  main.js
-  constants.js
-
+## up next
+ui/ - 2d screenspace stuff
+animation.js
+keyboard.js
+mouse.js
+gamepad.js
+audio.js
+camera.js
+raycast.js
+network.js
 
 tests/
+??
+
+## later optimization
+
+matrixAutoUpdate
 
 
 ## reference
 
+http://regl.party/api
 https://glmatrix.net/docs/index.html
