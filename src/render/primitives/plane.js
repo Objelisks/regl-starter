@@ -1,11 +1,11 @@
 import { regl } from '../regl.js'
 
 export const planeVertices = [
-  [-0.5, 0, -0.5], [+0.5, 0, -0.5], [+0.5, 0, +0.5], [-0.5, 0, +0.5] // top face
+  [-0.5, -0.5, 0], [+0.5, -0.5, 0], [+0.5, +0.5, 0], [-0.5, +0.5, 0] // top face
 ]
 
 export const planeNormals = [
-  [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0] // top face
+  [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0] // top face
 ]
 
 export const planeElements = [

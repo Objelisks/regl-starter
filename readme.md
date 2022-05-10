@@ -22,7 +22,7 @@ framework stuff
 - some tests?
 
 test scene
-- draws an animated textured model
+- draws an animated? textured? model
 - mouse hit test drag to rotate
 - stats debug info
 
@@ -37,6 +37,7 @@ audio.js
 camera.js
 raycast.js
 network.js
+physics.js
 
 tests/
 ??
@@ -50,3 +51,4 @@ matrixAutoUpdate
 
 http://regl.party/api
 https://glmatrix.net/docs/index.html
+https://pmndrs.github.io/cannon-es/docs/index.html

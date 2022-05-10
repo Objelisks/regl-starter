@@ -11,6 +11,7 @@ import { flatShader } from './render/shaders.js'
 import { createModelDrawer } from './render/primitives/model.js'
 import { id } from './engine/util.js'
 import { getMouseRay, mouseState, mousePostUpdate } from './input/mouse.js'
+import { World, Body, Plane, Sphere, Vec3 } from 'cannon-es'
 
 const drawMouse = createModelDrawer('content/mouse1.gltf')
 
@@ -29,13 +30,18 @@ const things = [
     id: id(),
     position: [0,0,0],
     rotation: [0,0,0,1],
-    draw: drawPlane
+    scale: [5, 5, 5],
+    draw: drawPlane,
+    body: new Body({type: Body.STATIC, shape: new Plane()})
   },
   {
     id: id(),
-    position: t => [Math.cos(t), 0, Math.sin(t)],
-    rotation: t => quat.setAxisAngle([], [1, 0, 0], t),
-    draw: drawCube
+    position: [0, 0, 0],
+    rotation: [0, 0, 0, 1],
+    // position: t => [Math.cos(t), 0, Math.sin(t)],
+    // rotation: t => quat.setAxisAngle([], [1, 0, 0], t),
+    draw: drawCube,
+    body: new Body({mass: 1, shape: new Sphere(0.5)})
   },
   {
     id: id(),
@@ -46,8 +52,17 @@ const things = [
   }
 ]
 
+things[1].body.position.set(0, 4, 0)
+things[0].body.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
+
+
+const world = new World({ gravity: new Vec3(0, -9.8, 0)})
+things.forEach(thing => thing.body ? world.addBody(thing.body) : null)
+
+const delta = 0.016
+
 const draw = () => {
-  tick += 0.016
+  tick += delta
 
   camera({
     eye: [2, 2, 2],
@@ -80,6 +95,13 @@ const draw = () => {
     })
   })
 
+  things.forEach(thing => {
+    if(thing.body) {
+      vec3.copy(thing.position, thing.body.position.toArray())
+      quat.copy(thing.rotation, thing.body.quaternion.toArray())
+    }
+  })
+  world.fixedStep()
   mousePostUpdate()
   requestAnimationFrame(() => renderFrame(draw))
 }
