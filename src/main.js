@@ -1,6 +1,7 @@
 /* global requestAnimationFrame */
 
-import { quat } from 'gl-matrix'
+import { quat, vec3 } from 'gl-matrix'
+import createRay from 'ray-aabb'
 import { renderFrame } from './render/render.js'
 import { drawPlane } from './render/primitives/plane.js'
 import { camera } from './render/camera.js'
@@ -9,6 +10,7 @@ import { drawCube } from './render/primitives/cube.js'
 import { flatShader } from './render/shaders.js'
 import { createModelDrawer } from './render/primitives/model.js'
 import { id } from './engine/util.js'
+import { getMouseRay, mouseState, mousePostUpdate } from './input/mouse.js'
 
 const drawMouse = createModelDrawer('content/mouse1.gltf')
 
@@ -48,17 +50,37 @@ const draw = () => {
   tick += 0.016
 
   camera({
-      eye: [2, 2, 2],
-      target: [0, 0, 0]
-    },
-    (context) => {
-      flatShader({ color: [1, 0.5, 0.5] }, () => {
-        things.forEach((thing) => transform(evaluate(thing, tick), (context) => {
-          
-          thing.draw()
-        }))
+    eye: [2, 2, 2],
+    target: [0, 0, 0]
+  },
+  (context) => {
+    const mouseDir = getMouseRay(mouseState, context)
+    const mouseRay = createRay(context.eye, mouseDir)
+    const normal = [0, 0, 0]
+    const collisionDist = mouseRay.intersects([[-20, -1, -20], [20, 0, 20]], normal)
+
+    if(collisionDist !== false) {
+      const color = mouseState.buttons & 1 ? [0.5, 1, 0.5] : [1, 0.5, 0.5]
+      const collision = vec3.create([])
+      vec3.add(collision, vec3.scale(collision, mouseDir, collisionDist), context.eye)
+      flatShader({ color: color }, () => {
+        transform({
+          position: collision,
+          scale: [0.1, 0.1, 0.1]
+        }, () => drawCube())
       })
+    }
+
+    flatShader({ color: [1, 0.5, 0.5] }, () => {
+
+      things.forEach((thing) => transform(evaluate(thing, tick), (context) => {
+        
+        thing.draw()
+      }))
     })
+  })
+
+  mousePostUpdate()
   requestAnimationFrame(() => renderFrame(draw))
 }
 
