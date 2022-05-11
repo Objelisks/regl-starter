@@ -5,7 +5,7 @@ export const planeVertices = [
 ]
 
 export const planeNormals = [
-  [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0] // top face
+  [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1]// top face
 ]
 
 export const planeElements = [

@@ -10,7 +10,7 @@ uniform vec3 camPos;
 
 void main () {
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
-    vec3 lightPos = vec3(100.0, 100.0, 100.0);
+    vec3 lightPos = vec3(-5.0, 10.0, 5.0);
 
     vec3 lightDir = normalize(lightPos - vPos);
     vec3 normal = normalize(vNormal);

@@ -37,7 +37,6 @@ audio.js
 camera.js
 raycast.js
 network.js
-physics.js
 
 tests/
 ??
