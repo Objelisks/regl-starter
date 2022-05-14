@@ -11,9 +11,9 @@ import { flatShader, pbrShader } from './render/shaders/shaders.js'
 import { loadModel, createModelDrawer } from './render/primitives/model.js'
 import { id } from './engine/util.js'
 import { getMouseRay, mouseState, mousePostUpdate } from './input/mouse.js'
-import { drawGltf } from './render/primitives/gltf2.js'
+import { drawGltf } from './render/primitives/gltf.js'
 
-const drawMouse = createModelDrawer('content/mouse/mouse1.gltf')
+const mouse = loadModel('content/mouse/mouse1.gltf')
 const chunk = loadModel('content/chunk/chunk.gltf')
 const amanita = loadModel('content/amanita/amanita.gltf')
 
@@ -46,7 +46,7 @@ const things = [
     position: t => [Math.cos(t)*2.0, 0.0, Math.sin(t)*2.0],
     rotation: t => quat.setAxisAngle([], [0, 1, 0], t*3.0),
     scale: [0.1, 0.1, 0.1],
-    draw: () => flatShader({ color: [1, 0.5, 0.5] }, drawMouse)
+    draw: () => drawGltf(mouse(), flatShader)
   },
   {
     id: id(),
@@ -71,7 +71,7 @@ const things = [
   {
     id: id(),
     position: [1.5, -0.0, 1.5],
-    rotation: t => quat.setAxisAngle([], vec3.normalize([], [0, 1, 0]), t*4.0),
+    rotation: t => quat.setAxisAngle([], vec3.normalize([], [0, 1, 0]), t*0.2),
     scale: [0.25, 0.25, 0.25],
     draw: () => drawGltf(amanita())
   }
@@ -105,7 +105,7 @@ const draw = () => {
       })
     }
 
-    things.forEach((thing) => transform(evaluate(thing, 0), (context) => {
+    things.forEach((thing) => transform(evaluate(thing, context.time), (context) => {
       thing.draw()
     }))
   })

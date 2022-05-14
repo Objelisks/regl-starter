@@ -5,7 +5,6 @@ float PI = 3.1415;
 
 varying vec3 vPos;
 varying vec3 modelPos;
-//varying vec3 vNormal;
 varying vec2 vUv;
 varying mat3 vTBN;
 
@@ -48,7 +47,7 @@ void main () {
     float roughness = texture2D(metallicRoughnessTexture, vUv).g;
     float metallic = texture2D(metallicRoughnessTexture, vUv).b;
     vec3 normal = texture2D(normalTexture, vUv).rgb;
-    normal = 2.0*normal - 1.0;
+    normal = 2.0*normal - 1.0;// somethings off on the normals
 
     // tangent space normal
     vec3 N = normalize(vTBN * normal);
@@ -74,11 +73,11 @@ void main () {
     vec3 result = (diffuse + specular) * lightColor * max(dot(N, L), 0.0);
 
     // ambient lighting
-    result += vec3(0.3) * baseColor.rgb;
+    result += vec3(0.03) * baseColor.rgb;
 
     // gamma correction
     // result = result / (result + vec3(1.0));
-    // result = pow(result, vec3(1.0/2.2));
+    result = pow(result, vec3(1.0/2.2));
 
     gl_FragColor = vec4(vec3(result), 1.0);
 }

@@ -20,9 +20,9 @@ export const pbrShader = regl({
   frag: pbrFragment,
   vert: pbrVertex,
   uniforms: {
-    baseColorTexture: regl.context('baseColorTexture'),
-    metallicRoughnessTexture: regl.context('metallicRoughnessTexture'),
-    normalTexture: regl.context('normalTexture'),
+    baseColorTexture: regl.prop('baseColorTexture'),
+    metallicRoughnessTexture: regl.prop('metallicRoughnessTexture'),
+    normalTexture: regl.prop('normalTexture'),
     camPos: regl.context('eye'),
     time: regl.context('time')
   }

@@ -1,4 +1,3 @@
-import { setupSceneForDrawing, drawScene } from './gltf.js'
 import { parse } from '@loaders.gl/core'
 import { GLTFLoader } from '@loaders.gl/gltf'
 
@@ -32,19 +31,3 @@ const modelCacher = {}
   return (...args) => modelCacher[name](...args)
 }
 
-/**
- * creates a function that will eventually draw a model
- * @param {string} name relative url of model
- * @returns (props) => void
- */
-export const createModelDrawer = (name) => {
-  if (!modelCacher[name]) {
-    modelCacher[name] = () => {}
-    fetchModel(name).then(gltf => {
-      console.log(gltf)
-      setupSceneForDrawing(gltf.scene)
-      modelCacher[name] = () => drawScene(gltf.scene)
-    })
-  }
-  return (...args) => modelCacher[name](...args)
-}
