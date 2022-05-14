@@ -35,7 +35,6 @@ mouse.js
 gamepad.js
 audio.js
 camera.js
-raycast.js
 network.js
 
 tests/

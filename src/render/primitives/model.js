@@ -9,10 +9,9 @@ import { GLTFLoader } from '@loaders.gl/gltf'
  * @param {string} name relative url of model
  * @returns gltf scene object
  */
-export const loadModel = (name) => {
+export const fetchModel = (name) => {
   return fetch(name)
-    .then(data => parse(data, GLTFLoader))
-    .then(gltfData => gltfData.scene)
+    .then(data => parse(data, GLTFLoader, {gltf: {loadImages: true}}))
 }
 
 const modelCacher = {}
@@ -22,12 +21,29 @@ const modelCacher = {}
  * @param {string} name relative url of model
  * @returns (props) => void
  */
+ export const loadModel = (name) => {
+  if (!modelCacher[name]) {
+    modelCacher[name] = () => null
+    fetchModel(name).then(gltf => {
+      console.log(gltf)
+      modelCacher[name] = () => gltf
+    })
+  }
+  return (...args) => modelCacher[name](...args)
+}
+
+/**
+ * creates a function that will eventually draw a model
+ * @param {string} name relative url of model
+ * @returns (props) => void
+ */
 export const createModelDrawer = (name) => {
   if (!modelCacher[name]) {
     modelCacher[name] = () => {}
-    loadModel(name).then(scene => {
-      setupSceneForDrawing(scene)
-      modelCacher[name] = () => drawScene(scene)
+    fetchModel(name).then(gltf => {
+      console.log(gltf)
+      setupSceneForDrawing(gltf.scene)
+      modelCacher[name] = () => drawScene(gltf.scene)
     })
   }
   return (...args) => modelCacher[name](...args)

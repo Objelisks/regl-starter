@@ -17,7 +17,7 @@ const renderingModes = {
 
 const setupPrimitive = (primitive) => {
   primitive.draw = regl({
-    primitive: renderingModes[primitive.mode],
+    primitive: renderingModes[4],
     elements: primitive.indices.value,
     attributes: {
       position: primitive.attributes.POSITION.value,
