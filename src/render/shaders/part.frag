@@ -2,7 +2,6 @@
 precision mediump float;
 
 varying vec3 vPos;
-varying vec3 modelPos;
 varying vec3 vNormal;
 
 uniform vec3 color;

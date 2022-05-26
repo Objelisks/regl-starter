@@ -7,7 +7,6 @@ attribute vec3 normal;
 attribute vec3 offset;
 
 varying vec3 vPos;
-varying vec3 modelPos;
 varying vec3 vNormal;
 
 uniform mat4 projection, model, view;
@@ -16,7 +15,6 @@ uniform mat4 invModel;
 
 void main() {
   vPos = vec3(model * vec4(position, 1.0)) + offset;
-  modelPos = position + offset;
-  vNormal = mat3(transpose(invModel)) * normal;
+  vNormal = normalize(position);
   gl_Position = projection * view * model * vec4(position + offset, 1.0);
 }
