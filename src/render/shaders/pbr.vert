@@ -5,7 +5,7 @@ precision mediump float;
 attribute vec3 position;
 attribute vec3 normal;
 attribute vec2 uv;
-attribute vec3 tangent;
+attribute vec4 tangent;
 
 varying vec3 vPos;
 varying vec3 modelPos;
@@ -19,10 +19,10 @@ void main() {
     modelPos = position;
     vUv = uv;
 
-    vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));
+    vec3 T = normalize(vec3(model * vec4(tangent.rgb, 0.0)));
     vec3 N = normalize(vec3(model * vec4(normal, 0.0)));
     T = normalize(T - dot(T, N) * N);
-    vec3 B = cross(N, T);
+    vec3 B = cross(N, T) * tangent.w;
 
     vTBN = mat3(T, B, N);
 

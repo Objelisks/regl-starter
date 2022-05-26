@@ -13,6 +13,7 @@ module.exports = {
       directory: path.resolve(__dirname, 'public')
     }
   },
+  devtool: 'inline-source-map',
   plugins: [new HtmlWebpackPlugin({
     template: path.resolve(__dirname, 'public/index.html')
   })],

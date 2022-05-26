@@ -30,7 +30,7 @@ export const camera = regl({
     view: regl.context('view'),
     invView: (context) => mat4.invert([], context.view),
     model: () => mat4.create(),
-    invModel: () => mat4.invert([], mat4.create()),
+    invModel: () => mat4.create(),
     projection: regl.context('projection')
   }
 })

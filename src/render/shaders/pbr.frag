@@ -38,18 +38,21 @@ vec3 fresnel_schlick(vec3 f0, vec3 H, vec3 V) {
 }
 
 void main () {
+    float gamma = 2.2;
+
     // lights
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
     vec3 lightPos = vec3(cos(time)*2.0, 2.0, sin(time)*2.0);
 
     // textures
-    vec4 baseColor = texture2D(baseColorTexture, vUv);
+    // convert color from sRGB to linear
+    vec4 baseColor = pow(texture2D(baseColorTexture, vUv), vec4(gamma));
     float roughness = texture2D(metallicRoughnessTexture, vUv).g;
     float metallic = texture2D(metallicRoughnessTexture, vUv).b;
     vec3 normal = texture2D(normalTexture, vUv).rgb;
-    normal = 2.0*normal - 1.0;// somethings off on the normals
+    normal = normalize(2.0*normal - 1.0); // todo: somethings off on the normals
 
-    // tangent space normal
+    // world space normal
     vec3 N = normalize(vTBN * normal);
 
     // lighting vectors
@@ -76,8 +79,7 @@ void main () {
     result += vec3(0.03) * baseColor.rgb;
 
     // gamma correction
-    // result = result / (result + vec3(1.0));
-    result = pow(result, vec3(1.0/2.2));
+    result = pow(result, vec3(1.0/gamma));
 
     gl_FragColor = vec4(vec3(result), 1.0);
 }

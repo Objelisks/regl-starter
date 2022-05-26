@@ -12,6 +12,7 @@ import { loadModel, createModelDrawer } from './render/primitives/model.js'
 import { id } from './engine/util.js'
 import { getMouseRay, mouseState, mousePostUpdate } from './input/mouse.js'
 import { drawGltf } from './render/primitives/gltf.js'
+import { drawParticles } from './render/particles.js'
 
 const mouse = loadModel('content/mouse/mouse1.gltf')
 const chunk = loadModel('content/chunk/chunk.gltf')
@@ -71,9 +72,8 @@ const things = [
   {
     id: id(),
     position: [1.5, -0.0, 1.5],
-    rotation: t => quat.setAxisAngle([], vec3.normalize([], [0, 1, 0]), t*0.2),
-    scale: [0.25, 0.25, 0.25],
-    draw: () => drawGltf(amanita())
+    scale: [0.1, 0.1, 0.1],
+    draw: () => drawParticles()
   }
 ]
 
