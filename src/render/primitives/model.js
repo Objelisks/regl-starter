@@ -24,10 +24,8 @@ const modelCacher = {}
   if (!modelCacher[name]) {
     modelCacher[name] = () => null
     fetchModel(name).then(gltf => {
-      console.log(gltf)
       modelCacher[name] = () => gltf
     })
   }
   return (...args) => modelCacher[name](...args)
 }
-

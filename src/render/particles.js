@@ -2,11 +2,10 @@ import { regl } from './regl.js'
 import { fetchModel } from './primitives/model.js'
 import particlesFragment from './shaders/part.frag'
 import particlesVertex from './shaders/part.vert'
+import { vertexIds } from './gpgpu.js'
 
 let loaded = false
 let particlesDrawer = null
-
-const N = 50
 
 fetchModel('content/primitives/sphere.glb').then(scene => {
   loaded = true
@@ -16,44 +15,44 @@ fetchModel('content/primitives/sphere.glb').then(scene => {
     vert: particlesVertex,
     attributes: {
       position: data.attributes.POSITION.value,
-      normal: data.attributes.NORMAL.value,
-      offset: { // pos x y z, size
-        buffer: regl.buffer(
-          Array(N * N).fill().map((_, i) => {
-            var x = -(Math.floor(i / N) / N) * 1000
-            var z = -((i % N) / N) * 1000
-            return [x, 0.0, z]
-          })),
+      id: {
+        buffer: vertexIds(256),
         divisor: 1
-      },
-      data: { // vel x y z, life
-        buffer: regl.buffer(
-          new Uint8Array(Array(N * N * 4).fill().map((_, i) => {
-            var x = -(Math.floor(i / N) / N) * 1000
-            var z = -((i % N) / N) * 1000
-            return [x, 0.0, z]
-          }))),
-        divisor: 1
-      },
-      color: { // r g b, 
-        buffer: regl.buffer(
-          new Uint8Array(Array(N * N * 4).fill().map((_, i) => {
-            var x = -(Math.floor(i / N) / N) * 1000
-            var z = -((i % N) / N) * 1000
-            return [x, 0.0, z]
-          }))),
-        divisor: 1
-      },
+      }
     },
     uniforms: {
+      data: regl.prop('data'),
       color: [1, 0.5, 0.5],
-      camPos: (context) => context.eye,
+      camPos: regl.context('eye'),
       time: regl.context('time'),
       stretchFactor: 0.0,
     },
     elements: data.indices.value,
-    instances: N*N
+    instances: regl.prop('count')
   })
 })
 
-export const drawParticles = (instances) => loaded ? particlesDrawer(instances) : null
+export const drawParticles = (props) => loaded ? particlesDrawer(props) : null
+
+export const createParticlesBuffer = (size) => {
+  const data = new Float32Array(new Array(4*size*size).fill(0))
+  const testBuffers = [
+    regl.framebuffer({
+      color: regl.texture({
+        radius: size,
+        data: data,
+        type: 'float'
+      }),
+      depthStencil: false
+    }),
+    regl.framebuffer({
+      color: regl.texture({
+        radius: size,
+        data: data,
+        type: 'float'
+      }),
+      depthStencil: false
+    })
+  ]
+  return testBuffers
+}

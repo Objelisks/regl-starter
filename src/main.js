@@ -7,12 +7,15 @@ import { drawPlane } from './render/primitives/plane.js'
 import { camera } from './render/camera.js'
 import { transform } from './render/transform.js'
 import { drawCube } from './render/primitives/cube.js'
-import { flatShader, pbrShader } from './render/shaders/shaders.js'
-import { loadModel, createModelDrawer } from './render/primitives/model.js'
+import { flatShader } from './render/shaders/shaders.js'
+import { loadModel } from './render/primitives/model.js'
 import { id } from './engine/util.js'
 import { getMouseRay, mouseState, mousePostUpdate } from './input/mouse.js'
 import { drawGltf } from './render/primitives/gltf.js'
-import { drawParticles } from './render/particles.js'
+import { createParticlesBuffer, drawParticles } from './render/particles.js'
+import { createGpgpuRenderer } from './render/gpgpu.js'
+import { regl } from './render/regl.js'
+import weirdFrag from './render/shaders/weird.frag'
 
 const mouse = loadModel('content/mouse/mouse1.gltf')
 const chunk = loadModel('content/chunk/chunk.gltf')
@@ -24,6 +27,14 @@ const evaluate = (thing, t) => ({
   position: evalProp(thing.position, t),
   rotation: evalProp(thing.rotation, t),
   scale: evalProp(thing.scale, t)
+})
+
+const updateParticles = createGpgpuRenderer(weirdFrag)
+
+const testBuffers = createParticlesBuffer(256)
+let bufferFlip = 0
+const setFBO = regl({
+  framebuffer: regl.prop('framebuffer')
 })
 
 const things = [
@@ -73,13 +84,17 @@ const things = [
     id: id(),
     position: [1.5, -0.0, 1.5],
     scale: [0.1, 0.1, 0.1],
-    draw: () => drawParticles()
+    update: () => {
+      bufferFlip = (bufferFlip+1)%2
+      setFBO({framebuffer: testBuffers[bufferFlip]}, () => {
+        updateParticles({data: testBuffers[(bufferFlip+1)%2]})
+      })
+    },
+    draw: () => {
+      drawParticles({data: testBuffers[bufferFlip], count: 256*256})
+    }
   }
 ]
-
-// things[1].body.position.set(0, 4, 0)
-// things[0].body.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
-
 
 const raycaster = new Ray()
 const world = new World({ gravity: new Vec3(0, -9.8, 0)})
@@ -111,11 +126,16 @@ const draw = () => {
   })
 
   things.forEach(thing => {
+    if(thing.update) {
+      thing.update(thing)
+    }
+
     if(thing.body) {
       vec3.copy(thing.position, thing.body.position.toArray())
       quat.copy(thing.rotation, thing.body.quaternion.toArray())
     }
   })
+  
   world.fixedStep()
 
   mousePostUpdate()
