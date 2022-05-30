@@ -3,6 +3,7 @@ precision highp float;
 varying vec2 id;
 uniform sampler2D data;
 uniform float time;
+uniform mat4 model;
 
 float rand(float n){return fract(sin(n) * 43758.5453123);}
 float rand2(vec2 n) { 
@@ -118,13 +119,13 @@ void main() {
   vec4 oldData = texture2D(data, id);
   vec3 oldPos = oldData.xyz;
   float oldLife = oldData.w;
-  vec3 flow = curlNoise(oldPos*10.0+vec3(0, time*0.2, 0));
-  //vec3 newPos = oldPos + flow*0.0005;
-  vec3 newPos = oldPos + flow*0.001 + vec3(0.0, 0.001, 0.0) + snoiseVec3(oldPos*50.0) * 0.001;
-  float newLife = oldLife - 0.01;
+  vec3 flow = curlNoise(oldPos*50.0+vec3(0, time*2., 0));
+  vec3 newPos = oldPos + normalize(flow * 5. + vec3(0.0, 5.0, 0.0)) * 0.002;
+  float newLife = oldLife - 0.005;
   if(newLife <= 0.0) {
-    newPos = vec3(rand(id.x), rand(id.y), 0.0).xzy*0.03;
-    newLife = mod(rand2(id), 1.0)*1.0;
+    newPos = (vec3(rand(id.x), rand(id.y), rand(rand(id.y))).xzy*2.-1.0)/40.;
+    newPos = (model * vec4(newPos*10., 1.0)).xyz / 10.;
+    newLife = rand2(id)*0.2;
   }
   gl_FragColor = vec4(newPos, newLife);
 }

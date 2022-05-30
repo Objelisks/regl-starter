@@ -8,7 +8,7 @@ attribute vec2 uv;
 attribute vec4 tangent;
 
 varying vec3 vPos;
-varying vec3 modelPos;
+varying vec3 vNormal;
 varying vec2 vUv;
 varying mat3 vTBN;
 
@@ -16,7 +16,7 @@ uniform mat4 projection, model, view;
 
 void main() {
     vPos = vec3(model * vec4(position, 1.0));
-    modelPos = position;
+    vNormal = normal;
     vUv = uv;
 
     vec3 T = normalize(vec3(model * vec4(tangent.rgb, 0.0)));

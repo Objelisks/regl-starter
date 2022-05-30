@@ -31,10 +31,17 @@ const drawPrimitive = (primitive, shader) => {
   }
   let args = { color: [1, 0.5, 0.5] } // todo: make this generated based on shader
   const material = primitive.material
-  if(!material.textures && material.pbrMetallicRoughness.metallicRoughnessTexture) {
-    const baseColorTexture = regl.texture(material.pbrMetallicRoughness.baseColorTexture.texture.source.image)
-    const metallicRoughnessTexture = regl.texture(material.pbrMetallicRoughness.metallicRoughnessTexture.texture.source.image)
-    const normalTexture = regl.texture(material.normalTexture.texture.source.image)
+  if(!material.textures && material.pbrMetallicRoughness) {
+    const pbr = material.pbrMetallicRoughness
+    const baseColorTexture = pbr.baseColorTexture !== undefined ?
+      regl.texture(pbr.baseColorTexture.texture.source.image) :
+      regl.texture([[pbr.baseColorFactor.map(data => data * 255)]])
+    const metallicRoughnessTexture = pbr.metallicRoughnessTexture !== undefined ?
+      regl.texture(pbr.metallicRoughnessTexture.texture.source.image) :
+      regl.texture([[[1, pbr.roughnessFactor, pbr.metallicFactor, 1]]])
+    const normalTexture = material.normalTexture !== undefined ?
+      regl.texture(material.normalTexture.texture.source.image) :
+      regl.texture([[[0,0,0,0]]])
     material.textures = {
       baseColorTexture,
       metallicRoughnessTexture,

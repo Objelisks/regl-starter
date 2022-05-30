@@ -13,7 +13,7 @@ export const fetchModel = (name) => {
     .then(data => parse(data, GLTFLoader, {gltf: {loadImages: true}}))
 }
 
-const modelCacher = {}
+const modelCache = {}
 
 /**
  * creates a function that will eventually draw a model
@@ -21,11 +21,19 @@ const modelCacher = {}
  * @returns (props) => void
  */
  export const loadModel = (name) => {
-  if (!modelCacher[name]) {
-    modelCacher[name] = () => null
-    fetchModel(name).then(gltf => {
-      modelCacher[name] = () => gltf
+  if (!modelCache[name]) {
+    modelCache[name] = {
+      loading: null,
+      model: null
+    }
+    modelCache[name].loading = new Promise(resolve => {
+      fetchModel(name).then(gltf => {
+        modelCache[name].model = gltf
+        resolve(gltf)
+      })
     })
   }
-  return (...args) => modelCacher[name](...args)
+
+  // return (...args) => modelCache[name](...args)
+  return modelCache[name]
 }

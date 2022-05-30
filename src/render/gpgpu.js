@@ -18,7 +18,7 @@ export const planeElements = [
   [2, 1, 0], [2, 0, 3] // top face.
 ]
 
-const gpgpuDraw = (frag) => regl({
+export const createGpgpuRenderer = (frag) => regl({
   frag,
   vert: gpgpuVertex,
   attributes: {
@@ -30,10 +30,6 @@ const gpgpuDraw = (frag) => regl({
   },
   elements: planeElements
 })
-
-export const createGpgpuRenderer = (frag) => {
-  return gpgpuDraw(frag)
-}
 
 export const vertexIds = (size) => {
   const ids = new Float32Array(2*size*size)

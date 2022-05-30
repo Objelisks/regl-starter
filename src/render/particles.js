@@ -16,7 +16,7 @@ fetchModel('content/primitives/sphere.glb').then(scene => {
     attributes: {
       position: data.attributes.POSITION.value,
       id: {
-        buffer: vertexIds(256),
+        buffer: vertexIds(64),
         divisor: 1
       }
     },
@@ -35,7 +35,7 @@ fetchModel('content/primitives/sphere.glb').then(scene => {
 export const drawParticles = (props) => loaded ? particlesDrawer(props) : null
 
 export const createParticlesBuffer = (size) => {
-  const data = new Float32Array(new Array(4*size*size).fill(0))
+  const data = new Float32Array(new Array(size*size).fill(0).flatMap(x => [100,100,100,Math.random()]))
   const testBuffers = [
     regl.framebuffer({
       color: regl.texture({

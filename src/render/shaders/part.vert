@@ -1,5 +1,5 @@
 #version 100
-precision mediump float;
+precision highp float;
 
 attribute vec3 position;
 attribute vec2 id;
@@ -33,9 +33,9 @@ float noise(vec2 n) {
 
 void main() {
   vec4 data = texture2D(data, id);
-  vec3 dataPos = data.xyz*100.0;
+  vec3 dataPos = data.xyz*10.0;
   life = data.w;
-  float size = min(0.1, life * 1.0);
+  float size = max(0.0, life/2.0);
   vec3 pos = position * size;
   vPos = vec3(model * vec4(pos, 1.0)) + dataPos;
   vNormal = normalize(position);

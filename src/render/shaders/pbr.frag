@@ -4,11 +4,12 @@ precision mediump float;
 float PI = 3.1415;
 
 varying vec3 vPos;
-varying vec3 modelPos;
+varying vec3 vNormal;
 varying vec2 vUv;
 varying mat3 vTBN;
 
 uniform vec3 camPos;
+uniform vec3 lightPos;
 
 uniform float time;
 
@@ -42,14 +43,14 @@ void main () {
 
     // lights
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
-    vec3 lightPos = vec3(cos(time)*2.0, 2.0, sin(time)*2.0);
+    // vec3 lightPos = vec3(cos(time)*2.0, 2.0, sin(time)*2.0);
 
     // textures
     // convert color from sRGB to linear
     vec4 baseColor = pow(texture2D(baseColorTexture, vUv), vec4(gamma));
     float roughness = texture2D(metallicRoughnessTexture, vUv).g;
     float metallic = texture2D(metallicRoughnessTexture, vUv).b;
-    vec3 normal = texture2D(normalTexture, vUv).rgb;
+    vec3 normal = vNormal + texture2D(normalTexture, vUv).rgb;
     normal = normalize(2.0*normal - 1.0); // todo: somethings off on the normals
 
     // world space normal
