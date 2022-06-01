@@ -50,8 +50,9 @@ void main () {
     vec4 baseColor = pow(texture2D(baseColorTexture, vUv), vec4(gamma));
     float roughness = texture2D(metallicRoughnessTexture, vUv).g;
     float metallic = texture2D(metallicRoughnessTexture, vUv).b;
-    vec3 normal = vNormal + texture2D(normalTexture, vUv).rgb;
-    normal = normalize(2.0*normal - 1.0); // todo: somethings off on the normals
+    vec3 normal = texture2D(normalTexture, vUv).rgb;
+    normal = normalize(2.0*normal - 1.0);
+    normal = normal * vec3(1.0, -1.0, 1.0); // idk why, maybe the way painter exports normals?
 
     // world space normal
     vec3 N = normalize(vTBN * normal);
