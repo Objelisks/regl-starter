@@ -15,7 +15,9 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   plugins: [new HtmlWebpackPlugin({
-    template: path.resolve(__dirname, 'public/index.html')
+    template: path.resolve(__dirname, 'public/index.html'),
+    base: '/regl-starter',
+    publicPath: '/regl-starter'
   })],
   module: {
     rules: [

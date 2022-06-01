@@ -9,7 +9,8 @@ import { GLTFLoader } from '@loaders.gl/gltf'
  * @returns gltf scene object
  */
 export const fetchModel = (name) => {
-  return fetch(name)
+  const url = `${window.location.pathname}/${name}`
+  return fetch(url)
     .then(data => parse(data, GLTFLoader, {gltf: {loadImages: true}}))
 }
 
