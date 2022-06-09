@@ -3,6 +3,7 @@ precision highp float;
 varying vec2 id;
 uniform sampler2D data;
 uniform float time;
+uniform float delta;
 uniform mat4 model;
 
 float rand(float n){return fract(sin(n) * 43758.5453123);}
@@ -120,8 +121,8 @@ void main() {
   vec3 oldPos = oldData.xyz;
   float oldLife = oldData.w;
   vec3 flow = curlNoise(oldPos*50.0+vec3(0, time*2., 0));
-  vec3 newPos = oldPos + normalize(flow * 5. + vec3(0.0, 5.0, 0.0)) * 0.002;
-  float newLife = oldLife - 0.005;
+  vec3 newPos = oldPos + normalize(flow * 5. + vec3(0.0, 5.0, 0.0)) * 0.003;
+  float newLife = oldLife - delta * 0.3;
   if(newLife <= 0.0) {
     newPos = (vec3(rand(id.x), rand(id.y), rand(rand(id.y))).xzy*2.-1.0)/40.;
     newPos = (model * vec4(newPos*10., 1.0)).xyz / 10.;

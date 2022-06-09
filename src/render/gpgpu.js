@@ -26,7 +26,8 @@ export const createGpgpuRenderer = (frag) => regl({
   },
   uniforms: {
     data: regl.prop('data'),
-    time: regl.context('time')
+    time: regl.context('time'),
+    delta: 0.016
   },
   elements: planeElements
 })

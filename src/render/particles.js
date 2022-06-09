@@ -25,7 +25,6 @@ fetchModel('content/primitives/sphere.glb').then(scene => {
       color: [1, 0.5, 0.5],
       camPos: regl.context('eye'),
       time: regl.context('time'),
-      stretchFactor: 0.0,
     },
     elements: data.indices.value,
     instances: regl.prop('count')
