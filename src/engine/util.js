@@ -13,3 +13,5 @@ export const times = (x, func) => {
  * @returns a random uuid
  */
 export const id = () => crypto.randomUUID()
+
+export const random = (array) => array.length > 0 ? array[Math.floor(Math.random()*array.length)] : undefined

@@ -9,7 +9,7 @@ import { transform } from './render/transform.js'
 import { drawCube } from './render/primitives/cube.js'
 import { flatShader } from './render/shaders/shaders.js'
 import { loadModel } from './render/primitives/model.js'
-import { id } from './engine/util.js'
+import { id, random } from './engine/util.js'
 import { getMouseRay, mouseState, mousePostUpdate } from './input/mouse.js'
 import { drawGltf } from './render/primitives/gltf.js'
 import { createTextRenderer } from './render/primitives/text.js'
@@ -234,4 +234,9 @@ const draw = () => {
 
 requestAnimationFrame(() => renderFrame(draw))
 
-console.log('hello world')
+const nameIdeas = [
+  'gift - Game engIne For Tim',
+  'frog - Fresh Regl On Games'
+]
+
+console.log(random(nameIdeas))
