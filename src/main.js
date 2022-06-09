@@ -1,7 +1,7 @@
 /* global requestAnimationFrame */
 
 import { quat, vec3 } from 'gl-matrix'
-import { World, Body, Plane, Box, Vec3, Ray, RAY_MODES, Quaternion, DistanceConstraint, Sphere, RaycastResult, PointToPointConstraint } from 'cannon-es'
+import { World, Body, Plane, Box, Vec3, Ray, RAY_MODES, Quaternion, Sphere, RaycastResult, PointToPointConstraint } from 'cannon-es'
 import { renderFrame } from './render/render.js'
 import { drawPlane } from './render/primitives/plane.js'
 import { camera } from './render/camera.js'
@@ -12,10 +12,15 @@ import { loadModel } from './render/primitives/model.js'
 import { id } from './engine/util.js'
 import { getMouseRay, mouseState, mousePostUpdate } from './input/mouse.js'
 import { drawGltf } from './render/primitives/gltf.js'
+import { createTextRenderer } from './render/primitives/text.js'
 import { createParticlesBuffer, drawParticles } from './render/particles.js'
 import { createGpgpuRenderer } from './render/gpgpu.js'
 import { regl } from './render/regl.js'
 import weirdFrag from './render/shaders/weird.frag'
+
+const drawTorchText = createTextRenderer('torch')
+const drawCubeText = createTextRenderer('cube')
+const drawShroomyText = createTextRenderer('shroomy')
 
 const mouse = loadModel('content/mouse/mouse1.gltf')
 const chunk = loadModel('content/chunk/chunk.gltf')
@@ -58,9 +63,16 @@ const things = [
     position: [0, 0, 0],
     rotation: [0, 0, 0, 1],
     draw: (thing, context) => {
-      transform(evaluate(thing, context.time), () => {
+      const offset = evaluate(thing, context.time)
+      transform(offset, () => {
         flatShader({ color: [1, 0.5, 0.5] }, drawCube)
       })
+      
+      transform({
+        position: [offset.position[0]-0.05, offset.position[1]+0.75, offset.position[2]]
+      }, () => drawCubeText({
+        color: [1, 1, 1, 1]
+      }))
     },
     body: new Body({mass: 5, shape: new Box(new Vec3(0.5, 0.5, 0.5)),
       position: new Vec3(0, 1, -3)})
@@ -71,9 +83,15 @@ const things = [
     scale: [.1, .1, .1],
     rotation: t => quat.setAxisAngle([], [0, 1, 0], t),
     draw: (thing, context) => {
-      transform(evaluate(thing, context.time), () => {
+      const offset = evaluate(thing, context.time)
+      transform(offset, () => {
         drawGltf(amanita.model)
       })
+      transform({
+        position: [offset.position[0]-0.0, offset.position[1]+0.3, offset.position[2]]
+      }, () => drawShroomyText({
+        color: [1, 1, 1, 1]
+      }))
     }
   },
   {
@@ -82,9 +100,15 @@ const things = [
     rotation: t => quat.setAxisAngle([], [0, 1, 0], -t/6),
     scale: [.6, .6, .6],
     draw: (thing, context) => {
-      transform(evaluate(thing, context.time), () => {
+      const offset = evaluate(thing, context.time)
+      transform(offset, () => {
         drawGltf(amanita.model)
       })
+      transform({
+        position: [offset.position[0]-0.35, offset.position[1]+2.0, offset.position[2]]
+      }, () => drawShroomyText({
+        color: [1, 1, 1, 1]
+      }))
     }
   },
   {
@@ -93,7 +117,8 @@ const things = [
     rotation: [],
     scale: [0.5, 0.5, 0.5],
     draw: (thing, context) => {
-      transform(evaluate(thing, context.time), () => {
+      const offset = evaluate(thing, context.time)
+      transform(offset, () => {
         drawGltf(torch.model)
       })
       transform({position: [0,0.8,0]}, () => {
@@ -106,6 +131,11 @@ const things = [
         })
       })
       drawParticles({data: testBuffers[bufferFlip], count: particleSize*particleSize})
+      transform({
+        position: [offset.position[0]-0.25, offset.position[1]+0.75, offset.position[2]]
+      }, () => drawTorchText({
+        color: [1, 1, 1, 1]
+      }))
     },
     body: new Body({mass: 0.5, shape: new Box(new Vec3(0.1, 0.5, 0.1)),
       position: new Vec3(0, 2, 0)})
@@ -170,6 +200,8 @@ const draw = () => {
       mouseConstraint = null
     }
 
+    // drawing
+
     lights({lightPos}, (context) => {
       flatShader({ color: color }, () => {
         transform({
@@ -179,6 +211,8 @@ const draw = () => {
       })
       things.forEach((thing) => thing.draw(thing, context))
     })
+
+    // updates
 
     things.forEach(thing => {
       if(thing.update) {
