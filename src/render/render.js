@@ -4,6 +4,10 @@ import { times } from '../engine/util.js'
 
 const BUFFER_COUNT = 2
 
+const setFBO = regl({
+  framebuffer: regl.prop('framebuffer')
+})
+
 const makeFramebuffer = (width, height) => {
   const color = regl.texture({ width, height })
   const depth = regl.texture({ width, height, format: 'depth', type: 'uint32' })
@@ -57,12 +61,13 @@ const renderFrame = (drawWorld) => {
     if (i === passes.length - 1) {
       pass()
     } else {
-      activeFrame().fbo.use(pass)
+      setFBO(activeFrame().fbo, pass)
     }
   })
 }
 
 export {
   activeFrame,
-  renderFrame
+  renderFrame,
+  setFBO
 }

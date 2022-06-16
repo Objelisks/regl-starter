@@ -14,8 +14,8 @@ float median(float r, float g, float b) {
 void main() {
   vec3 distMap = texture2D(fontAtlas, uv).rgb;
   float dist = median(distMap.r, distMap.g, distMap.b);
-  if(dist < 0.1) {
+  if(dist < 0.25) {
     discard;
   }
-  gl_FragColor = vec4(vec3(color), dist);
+  gl_FragColor = vec4(vec3(color), smoothstep(0.0, 1.0, dist));
 }

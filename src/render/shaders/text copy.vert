@@ -20,7 +20,7 @@ void main() {
   uv = (imageCoords * character.zw + character.xy)/size;
   vec2 characterBoxSize = plane.zw;
   // this makes it a billboard (only transforming the world space position)
-  vec4 worldPos = model * vec4(0.0, 0.0, 0.0, 1.0);
+  vec4 worldPos = projection * view * model * vec4(0.0, 0.0, 0.0, 1.0);
   vec4 result = vec4(
     (characterBoxSize * position.xy + // character shape
     plane.xy + // offset by character adjustment
