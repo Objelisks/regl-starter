@@ -27,6 +27,5 @@ void main() {
     cursor) * em, // offset by cursor
     0.0, 1.0) + worldPos;
   result /= result.w;
-  result += vec4(0.0, 0.0, -cursor.x/1000.0, 0.0);
   gl_Position = result;
 }

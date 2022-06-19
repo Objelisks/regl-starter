@@ -1,5 +1,5 @@
 import { camera } from '../render/camera.js'
-import { createTextRenderer } from '../render/primitives/text.js'
+import { createTextRenderer, justification } from '../render/primitives/text.js'
 import { drawRect } from '../render/primitives/rect.js'
 import { regl } from '../render/regl'
 import { transform } from '../render/transform.js'
@@ -15,15 +15,20 @@ const transition = (newScreen) => {
 }
 const screens = {}
 
-const button = ({label, action, x, y, w, h}) => {
-  const drawLabel = createTextRenderer(label)
+const noDepth = regl({
+  depth: {
+    enable: false
+  }
+})
+
+const button = ({label, action, width, height}) => {
+  const drawLabel = createTextRenderer({text: label, size: 24})
   return (context) => {
-    transform({scale: [w, h, 1]}, () =>
-      drawRect()
-    )
-    transform({position: [-0.38, 0.2, -0.1]}, () =>
+    noDepth({}, () => {
+      drawRect({width: width, height: height, roundedness: [2.0, 2.0, 0.0, 2.0], color: [0.6, 0.6, 0.8]})
+      drawRect({width: width-10, height: height-10, roundedness: [2.0, 2.0, 0.0, 2.0], color: [0.0, 0.0, 0.5]})
       drawLabel({color: [1, 1, 1, 1]})
-    )
+    })
     // if(context.mouseDown && inside(box, context.mouseState)) {
     //   action(context)
     // }
@@ -31,10 +36,22 @@ const button = ({label, action, x, y, w, h}) => {
 }
 
 const titleScreen = () => {
-  const drawTitleText = createTextRenderer('Title_Screen')
+  const drawTitleText = createTextRenderer({text: 'Title_Screen'})
+  const newGameButton = button({
+    label: 'new_game', action: () => transition(screens.settings),
+    width: 540, height: 150
+  })
+  const continueButton = button({
+    label: 'continue', action: () => transition(screens.settings),
+    width: 470, height: 150
+  })
   const settingsButton = button({
     label: 'settings', action: () => transition(screens.settings),
-    w: 0.5, h: 0.25
+    width: 420, height: 150
+  })
+  const creditsButton = button({
+    label: 'credits', action: () => transition(screens.credits),
+    width: 420, height: 150
   })
   return () => {
     camera({
@@ -45,8 +62,17 @@ const titleScreen = () => {
         drawTitleText({color: [1, 1, 1, 1]})
       )
       
-      transform({position: [-0.5, -0.5, 0]}, () =>
+      transform({position: [1.075, -0.4, 0]}, () =>
+        newGameButton(context)
+      )
+      transform({position: [1.035, -0.7, 0]}, () =>
+        continueButton(context)
+      )
+      transform({position: [1, -1, 0]}, () =>
         settingsButton(context)
+      )
+      transform({position: [1, -1.3, 0]}, () =>
+        creditsButton(context)
       )
     })
   }
@@ -61,7 +87,7 @@ const settingsScreen = () => {
       eye: [0, 0, 1],
       target: [0, 0, 0]
     }, (context) => {
-      transform({position: [-0.5, 1, 0]}, () =>
+      transform({position: [-0.5, 0, 0]}, () =>
         toggleFgsfds({color: [1, 1, 1, 1]})
       )
       //transition(screens.settings)

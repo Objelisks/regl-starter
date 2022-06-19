@@ -1,7 +1,7 @@
 import { regl } from '../regl.js'
 
-import screenFragment from '../shaders/screen.frag'
-import screenVertex from '../shaders/screen.vert'
+import rectFragment from '../shaders/rect.frag'
+import rectVertex from '../shaders/rect.vert'
 
 export const rectVertices = [
   [-0.5, -0.5], [+0.5, -0.5], [+0.5, +0.5], [-0.5, +0.5] // top face
@@ -12,13 +12,25 @@ export const rectElements = [
 ]
 
 export const drawRect = regl({
-  frag: screenFragment,
-  vert: screenVertex,
+  frag: rectFragment,
+  vert: rectVertex,
   attributes: {
     position: rectVertices
   },
   uniforms: {
-    color: [1, 0.5, 0.5]
+    color: (context, props) => props.color || [1.0, 0.5, 0.5],
+    size: (context, props) => [props.width, props.height],
+    roundedness: (context, props) => Array.isArray(props.roundedness) ? props.roundedness : [props.roundedness, props.roundedness, props.roundedness, props.roundedness],
+    resolution: (context) => [context.viewportWidth, context.viewportHeight]
   },
-  elements: rectElements
+  elements: rectElements,
+  blend: {
+    enable: true,
+    func: {
+      srcRGB: 'src alpha',
+      srcAlpha: 1,
+      dstRGB: 'one minus src alpha',
+      dstAlpha: 1
+    },
+  }
 })
