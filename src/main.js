@@ -19,7 +19,7 @@ const draw = () => {
 requestAnimationFrame(() => renderFrame(draw))
 
 const nameIdeas = [
-  'gift - Game engIne For Tim',
+  'gift - Game engIne For Tims',
   'frog - Fresh Regl On Games'
 ]
 

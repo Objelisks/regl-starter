@@ -36,21 +36,21 @@ const button = ({label, action, width, height}) => {
 }
 
 const titleScreen = () => {
-  const drawTitleText = createTextRenderer({text: 'Title_Screen'})
+  const drawTitleText = createTextRenderer({text: 'Title Screen:\nnew line'})
   const newGameButton = button({
-    label: 'new_game', action: () => transition(screens.settings),
+    label: 'New game', action: () => transition(screens.settings),
     width: 540, height: 150
   })
   const continueButton = button({
-    label: 'continue', action: () => transition(screens.settings),
+    label: 'Continue', action: () => transition(screens.settings),
     width: 470, height: 150
   })
   const settingsButton = button({
-    label: 'settings', action: () => transition(screens.settings),
+    label: 'Settings', action: () => transition(screens.settings),
     width: 420, height: 150
   })
   const creditsButton = button({
-    label: 'credits', action: () => transition(screens.credits),
+    label: 'Credits', action: () => transition(screens.credits),
     width: 420, height: 150
   })
   return () => {
@@ -58,20 +58,19 @@ const titleScreen = () => {
       eye: [0, 0, 1],
       target: [0, 0, 0]
     }, (context) => {
-      transform({position: [-0.5, 1, 0]}, () =>
+      transform({position: [0, 1, 0]}, () =>
         drawTitleText({color: [1, 1, 1, 1]})
       )
-      
-      transform({position: [1.075, -0.4, 0]}, () =>
+      transform({position: [0, -0.4, 0]}, () =>
         newGameButton(context)
       )
-      transform({position: [1.035, -0.7, 0]}, () =>
+      transform({position: [0, -0.7, 0]}, () =>
         continueButton(context)
       )
-      transform({position: [1, -1, 0]}, () =>
+      transform({position: [0, -1, 0]}, () =>
         settingsButton(context)
       )
-      transform({position: [1, -1.3, 0]}, () =>
+      transform({position: [0, -1.3, 0]}, () =>
         creditsButton(context)
       )
     })

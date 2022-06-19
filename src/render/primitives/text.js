@@ -20,43 +20,108 @@ export const justification = {
   'end': 2
 }
 
+const NEW_LINE = 10
+
+const isWhitespace = (codePoint) => [10, 32].includes(codePoint)
+
+const extraChars = [
+  {
+    unicode: '\n'.codePointAt(0),
+    advance: 0
+  }
+]
+
+// okay, so
 export const createTextRenderer = ({
   text,
   justify: [justificationRow, justificationColumn] = [justification.center, justification.center],
-  size=40
+  lineHeight = 1.2,
+  size = 40
 }) => {
+  // code points vs string characters keeps emoji joined together
   const codePoints = [...text]
+  // graph the glyph data out of the font json or extra non-rendered data
   const glyphs = codePoints.map(char =>
-    glyphData.glyphs.find((glyph) => glyph.unicode === char.codePointAt(0)))
-  const length = glyphs.reduce((acc, glyph) => {
-    return acc + glyph.advance*2.0
-  }, 0)
-  
-  const height = glyphs.reduce((acc, glyph) => {
-    return Math.max(acc, glyph.planeBounds.top-glyph.planeBounds.bottom)
-  }, 0)
+    glyphData.glyphs.find((glyph) => glyph.unicode === char.codePointAt(0)) ||
+    extraChars.find(glyph => glyph.unicode === char.codePointAt(0)))
 
-  let cursor = [0,0]
-  switch(justificationRow) {
-    case justification.start:
-      break;
-    case justification.center:
-      cursor[0] += -length/2.0
-      break;
-    case justification.end:
-      cursor[0] += -length;
-      break;
-  }
-  switch(justificationColumn) {
-    case justification.start:
-      break;
-    case justification.center:
-      cursor[1] += -height/2.0
-      break;
-    case justification.end:
-      cursor[1] += -height;
-      break;
-  }
+  let nextCursor = [0, 0]
+  const lineWidths = []
+
+  // convert to renderable data
+  const characters = glyphs.flatMap((glyph) => {
+    const thisCursor = [...nextCursor]
+    if(glyph.unicode === NEW_LINE) {
+      lineWidths.push(nextCursor[0])
+      nextCursor[0] = 0
+      nextCursor[1] += -lineHeight*2.0
+    } else {
+      nextCursor[0] += glyph.advance*2.0
+    }
+
+    // don't render whitespace (cursor already moved)
+    if(isWhitespace(glyph.unicode)) {
+      return []
+    }
+
+    return [{
+      // cursor points to where the character should be drawn
+      cursor: thisCursor,
+      // plane is the bounds of the character when rendered
+      plane: [
+        glyph.planeBounds.right+glyph.planeBounds.left,
+        glyph.planeBounds.top+glyph.planeBounds.bottom,
+        (glyph.planeBounds.right-glyph.planeBounds.left),
+        (glyph.planeBounds.top-glyph.planeBounds.bottom)
+      ],
+      // character is the bounds of the character in the atlas
+      character: [
+        glyph.atlasBounds.left,
+        (glyphData.atlas.height-glyph.atlasBounds.top),
+        (glyph.atlasBounds.right-glyph.atlasBounds.left),
+        (glyph.atlasBounds.top-glyph.atlasBounds.bottom)
+      ]
+    }]
+  })
+
+  // flush the last width
+  lineWidths.push(nextCursor[0])
+
+  // heights go negative (add a lineheight=1.0 height to the end to account for the first line)
+  const height = Math.abs(nextCursor[1] - 2.0)
+
+  // start off -1 to trigger new line logic on first line
+  let currentLine = -1
+  let currentLineHeight = null
+
+  // justify text
+  characters.forEach(character => {
+    if(character.cursor[1] !== currentLineHeight) {
+      currentLine += 1
+      currentLineHeight = character.cursor[1]
+    }
+    
+    switch(justificationRow) {
+      case justification.start:
+        break;
+      case justification.center:
+        character.cursor[0] += -lineWidths[currentLine]/2.0
+        break;
+      case justification.end:
+        character.cursor[0] += -lineWidths[currentLine]
+        break;
+    }
+    switch(justificationColumn) {
+      case justification.start:
+        break;
+      case justification.center:
+        character.cursor[1] += -height/2.0
+        break;
+      case justification.end:
+        character.cursor[1] += -height
+        break;
+    }
+  })
 
   return regl({
     frag: textFrag,
@@ -64,33 +129,15 @@ export const createTextRenderer = ({
     attributes: {
       position: planeVertices,
       cursor: {
-        buffer: glyphs.map((glyph) => {
-          const current = [...cursor]
-          cursor[0] += glyph.advance*2.0
-          return current
-        }),
+        buffer: characters.map(char => char.cursor),
         divisor: 1
       },
       plane: {
-        buffer: glyphs.flatMap(glyph => {
-          return [
-            glyph.planeBounds.right+glyph.planeBounds.left,
-            glyph.planeBounds.top+glyph.planeBounds.bottom,
-            (glyph.planeBounds.right-glyph.planeBounds.left),
-            (glyph.planeBounds.top-glyph.planeBounds.bottom)
-          ]
-        }),
+        buffer: characters.map(char => char.plane),
         divisor: 1
       },
       character: {
-        buffer: glyphs.flatMap(glyph => {
-          return [
-            glyph.atlasBounds.left,
-            (glyphData.atlas.height-glyph.atlasBounds.top),
-            (glyph.atlasBounds.right-glyph.atlasBounds.left),
-            (glyph.atlasBounds.top-glyph.atlasBounds.bottom)
-          ]
-        }),
+        buffer: characters.map(char => char.character),
         divisor: 1
       }
     },
@@ -122,6 +169,6 @@ export const createTextRenderer = ({
         dstAlpha: 1
       },
     },
-    instances: glyphs.length
+    instances: characters.length
   })
 }
